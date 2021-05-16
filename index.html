@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Task 4-5</title>
+</head>
+<body>
+<div style="width: 250px; margin: 0 auto; ">
+  <h1 class="title">Domain one</h1>
+  <fieldset style="width: 200px">
+    <legend>Local Storage</legend>
+    <label>Key:  <input type="text" id="key" placeholder="Key"></label>
+    <label>Value:&nbsp;<input type="text" id="value" placeholder="Value"></label>
+    <button type="button" id="set">Write</button>
+    <button type="button" id="get">Read</button>
+    <button type="button" id="delete">Delete</button>
+  </fieldset>
+  <div>
+    <iframe id="iframe" src="./iframe.html">
+    </iframe>
+  </div>
+</div>
+<script>
+  const iframe = document.querySelector('#iframe');
+  const keyInput = document.querySelector('#key');
+  const valueInput = document.querySelector('#value');
+  const set = document.querySelector('#set');
+  const get = document.querySelector('#get');
+  const del = document.querySelector('#delete');
+
+  iframe.onload = () => {console.log('iframe loaded')};
+  iframe.onerror = () => {console.log('Something wrong!')};
+  window.onmessage = (event) => {
+    if (event.data === 'reply') {
+      console.log('callback!');
+    }
+  };
+  const postMessageHandler = (method, key = keyInput.value, value = valueInput.value) => {
+      const messageData = JSON.stringify({ method, key, value });
+      iframe.contentWindow.postMessage(messageData, '*');
+  };
+
+  set.addEventListener('click',() => {postMessageHandler('set');});
+  get.addEventListener('click',() => {postMessageHandler('get');});
+  del.addEventListener('click',() => {postMessageHandler('delete');});
+
+</script>
+</body>
+</html>
